@@ -1,6 +1,10 @@
 const fs = require('fs')
 
-const puzzle = fs.readFileSync('./puzzles/1.txt', { encoding: 'utf8' })
+const puzzles = [
+  fs.readFileSync('./puzzles/1.txt', { encoding: 'utf8' }),
+  fs.readFileSync('./puzzles/2.txt', { encoding: 'utf8' }),
+  fs.readFileSync('./puzzles/3.txt', { encoding: 'utf8' })
+]
 
 const getXYRegion = (x, y) => {
   return Math.ceil(x / 3) + (Math.floor((y - 1) / 3) * 3)
@@ -86,10 +90,17 @@ const printMap = (cells, spaced = true) => {
   console.log(out)
 }
 
-const cells = parsePuzzle(puzzle)
-console.log('Puzzle:')
-printMap(cells)
+const start = Date.now()
+for (const puzzle of puzzles) {
+  const puzzleStart = Date.now()
+  const cells = parsePuzzle(puzzle)
+  console.log('Puzzle:')
+  printMap(cells)
 
-const solution = solve(cells)
-console.log('\nSolution:')
-printMap(solution)
+  const solution = solve(cells)
+  console.log('\nSolution:')
+  printMap(solution)
+  console.log(`Took ${Date.now() - puzzleStart}ms to solve`)
+}
+
+console.log(`\nSolved all puzzles after ${Date.now() - start}ms`)
